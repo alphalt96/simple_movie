@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build",
+        "lib": [
+            "dom",
+            "es2017.object"
+        ],
+        "target": "es5",
+        "experimentalDecorators": true
+    }
+}

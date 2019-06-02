@@ -13,6 +13,7 @@ export class TestController extends BaseController {
 
   @Post('/ahihi')
   test2(req, res) {
-    res.send('ahihi');
+    console.log('ahihi');
+    res.send('ahihi')
   }
 }

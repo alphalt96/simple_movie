@@ -1,8 +1,8 @@
 version: 2
- jobs:
-   lint:
-     docker:
-       - image: circleci/node:11.10.1
-     steps:
-       - checkout
-       - run: npm run lint
+jobs:
+  lint:
+    docker:
+      - image: circleci/node:11.10.1
+    steps:
+      - checkout
+      - run: npm run lint

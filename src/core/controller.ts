@@ -1,10 +1,13 @@
-import { Logger } from "./logger";
-import { IRouter } from "express";
+import { Logger } from './logger';
 
-export interface IController {
+export interface Controller {
   logger: Logger;
 }
 
-export interface IControllerInstance {
-  new(logger: Logger): IController;
+export interface ControllerInstance {
+  new(): Controller;
+}
+
+export class BaseController implements Controller {
+  logger: Logger;
 }

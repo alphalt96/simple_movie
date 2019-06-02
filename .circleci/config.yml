@@ -15,4 +15,4 @@ jobs:
     docker: *docker-node-11
     steps:
       - checkout
-      - run: npm run lint
+      - run: npx tslint --project tsconfig.json

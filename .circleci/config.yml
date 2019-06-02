@@ -15,4 +15,12 @@ jobs:
     docker: *docker-node-11
     steps:
       - checkout
+      - run: npm install
       - run: npm run lint
+
+workflows:
+  version: 2
+  build_lint_test:
+    jobs:
+      - build
+      - lint

@@ -1,8 +1,18 @@
 version: 2
+
+aliases:
+  - &docker-node-11
+    - image: circleci/node:11.10.1
+
 jobs:
+  build:
+    docker: *docker-node-11
+    steps:
+      - checkout
+      - run: echo 'starting ci'
+
   lint:
-    docker:
-      - image: circleci/node:11.10.1
+    docker: *docker-node-11
     steps:
       - checkout
       - run: npm run lint

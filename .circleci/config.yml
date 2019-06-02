@@ -2,7 +2,9 @@ version: 2
  jobs:
    build:
      docker:
-       - image: circleci/ruby:2.4.1
+       - image: circleci/node:11.10.1
      steps:
        - checkout
-       - run: npm run lint
+       - run:
+        name: run-linter
+        command: npm run lint

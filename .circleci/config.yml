@@ -16,3 +16,10 @@ jobs:
     steps:
       - checkout
       - run: npx tslint --project tsconfig.json
+
+workflows:
+  version: 2
+  build_lint_test:
+    jobs:
+      - build
+      - lint

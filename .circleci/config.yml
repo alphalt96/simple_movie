@@ -15,6 +15,7 @@ jobs:
     docker: *docker-node-11
     steps:
       - checkout
+      - run: npm install
       - run: npx tslint --project tsconfig.json
 
 workflows:

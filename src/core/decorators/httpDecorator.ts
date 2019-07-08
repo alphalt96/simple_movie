@@ -123,7 +123,7 @@ export const loadHandlerWithRoute = (content: {
         router[route.method].apply(router, [
           route.path,
           ...privateMiddlewares,
-          controller[route.handler]
+          controller[route.handler].bind(controller)
         ]);
       });
       app.use(reflectRoutes.baseUrl, router);

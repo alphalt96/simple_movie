@@ -28,6 +28,7 @@
             "options": [
                 "allow-pascal-case"
             ]
-        }
+        },
+        "curly": false
     }
 }

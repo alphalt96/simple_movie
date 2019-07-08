@@ -33,9 +33,9 @@ services:
     volumes:
       - ./database:/query
       - ./cassandra.yaml:/etc/cassandra/cassandra.yaml
-      - ./cmd/wait-for-it.sh:/wait-for-it.sh
+      - ./cmd/entrypoint.sh:/entrypoint.sh
       - ./cmd/init-db.sh:/init-db.sh
-    entrypoint: /init-db.sh
+    entrypoint: /entrypoint.sh
   storage:
     image: minio/minio:RELEASE.2019-06-15T23-07-18Z
     container_name: app_storage

@@ -11,9 +11,11 @@
   "author": "anh",
   "license": "ISC",
   "dependencies": {
+    "@types/cassandra-driver": "^4.0.3",
     "@types/express": "^4.16.1",
     "@types/winston": "^2.4.4",
     "aws-sdk": "^2.476.0",
+    "cassandra-driver": "^4.1.0",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
     "http-errors": "^1.7.2",

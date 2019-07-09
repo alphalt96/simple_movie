@@ -111,9 +111,9 @@ start_cassandra() {
 }
 
 init_script() {
-  USERNAME="cassandra"
-  PASSWORD="cassandra"
-  while ! cqlsh -u USERNAME -p PASSWORD -e 'describe cluster' ; do
+  username="cassandra"
+  password="cassandra"
+  while ! cqlsh -u $username -p $password -e 'describe cluster' ; do
     echo >&2 "==> Wait for cassandra ready"
     sleep 5
   done
@@ -121,10 +121,10 @@ init_script() {
   echo "==> Cassandra is ready for connect!"
 
   echo "==> Init init admin auth"
-  SOURCE '/query/createAuth.cql'
+  cqlsh -u $username -p $password -f '/query/createAuth.cql'
 
   echo "==> Init keyspace"
-  SOURCE '/query/createKeyspace.cql'
+  cqlsh -u $username -p $password -f '/query/createKeyspace.cql'
 }
 
 start_cassandra &

@@ -6,12 +6,16 @@ import { BaseController } from '../core/controller';
 })
 export class TestController extends BaseController {
 
-  @Get('/test')
+  @Get({
+    path: '/test'
+  })
   test(req, res) {
     res.send('test cai coin card a`');
   }
 
-  @Post('/ahihi')
+  @Post({
+    path: '/ahihi'
+  })
   test2(req, res) {
     res.send('ahihi');
   }

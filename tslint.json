@@ -29,6 +29,7 @@
                 "allow-pascal-case"
             ]
         },
-        "curly": false
+        "curly": false,
+        "arrow-parens": false
     }
 }

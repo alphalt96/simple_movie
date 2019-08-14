@@ -28,7 +28,6 @@ loadHandlerWithRoute({
 // use errorHandler middleware
 app.use(errorHandler);
 
-
 const port = process.env.SERVER_PORT || 3000;
 app.listen(port, () => {
   logger.info(`server running on port ${port}`);

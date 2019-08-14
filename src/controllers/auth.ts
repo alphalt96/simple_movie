@@ -8,7 +8,7 @@ import { validateUserRegister } from '../shared/validator/auth';
 import { UserCredential } from '../database/models/userCredential';
 import { BodyResponse } from '../shared/serialiazer';
 import constraint from '../shared/constraint';
-import * as bcrypt from 'bcrypt';
+import { hashPassword } from '../shared/hash';
 
 @BaseUrl({
   prefix: '/api/auth',
@@ -42,8 +42,9 @@ export class AuthController extends BaseController {
     try {
       await UserCredential.save(UserCredential.create({
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 10)
+        password: hashPassword(req.body.password)
       }));
+      this.logger.info('create user success');
       res.json(new BodyResponse(constraint.http.status[200]));
       res.end();
     } catch (e) {

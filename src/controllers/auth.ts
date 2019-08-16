@@ -5,7 +5,6 @@ import { Response, Request } from 'express';
 import * as createError from 'http-errors';
 import { generateToken } from '../shared/jwt';
 import { validateUserRegister } from '../shared/validator/auth';
-import { UserCredential } from '../database/models/userCredential';
 import { BodyResponse } from '../shared/serialiazer';
 import constraint from '../shared/constraint';
 import { hashPassword } from '../shared/hash';
@@ -40,12 +39,12 @@ export class AuthController extends BaseController {
   })
   async register(req: Request, res: Response, next: NextFunction) {
     try {
-      await UserCredential.save(UserCredential.create({
-        email: req.body.email,
-        password: hashPassword(req.body.password)
-      }));
-      this.logger.info('create user success');
-      res.json(new BodyResponse(constraint.http.status[200]));
+      // await UserCredential.save(UserCredential.create({
+      //   email: req.body.email,
+      //   password: hashPassword(req.body.password)
+      // }));
+      // this.logger.info('create user success');
+      // res.json(new BodyResponse(constraint.http.status[200]));
       res.end();
     } catch (e) {
       next(e);

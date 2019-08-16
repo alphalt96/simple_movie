@@ -8,6 +8,8 @@ services:
       - .:/usr/app
     ports:
       - 3000:3000
+    networks:
+      - dc1ring
     environment:
       - DATABASE_URL="postgres://postgres:secret@db/simple_movie"
     depends_on:
@@ -38,6 +40,8 @@ services:
     command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     networks:
       - dc1ring
+    ports:
+      - 9042:9042
   cassandra2:
     image: cassandra:3.11.4
     container_name: app_cassandra_db_2
@@ -51,7 +55,7 @@ services:
     depends_on:
       - cassandra1
     ports:
-      - 9042:9042
+      - 9043:9042
       # - 7000
     command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 60; fi && /docker-entrypoint.sh cassandra -f'
 

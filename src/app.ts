@@ -13,11 +13,11 @@ import { createConnection } from 'typeorm';
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
-createConnection().then(() => {
-  logger.info('connection establish');
-}).catch(e => {
-  logger.error('fail to create connection', e);
-});
+// createConnection().then(() => {
+//   logger.info('connection establish');
+// }).catch(e => {
+//   logger.error('fail to create connection', e);
+// });
 
 // import controller into router
 loadHandlerWithRoute({

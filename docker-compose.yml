@@ -15,18 +15,7 @@ services:
     depends_on:
       - cassandra2
     command: npm run dev
-  # db:
-  #   image: postgres:11.3-alpine
-  #   container_name: app_db
-  #   ports:
-  #     - 5433:5432
-  #   environment:
-  #     - POSTGRES_DB=simple_movie
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=secret
-  #   volumes:
-  #     - ./data/postgres:/var/lib/postgresql/data2
-      # - ./src/database/initdb.sql:/docker-entrypoint-initdb.d/init.sql
+
   cassandra1:
     image: cassandra:3.11.4
     container_name: app_cassandra_db_1
@@ -42,6 +31,7 @@ services:
       - dc1ring
     ports:
       - 9042:9042
+
   cassandra2:
     image: cassandra:3.11.4
     container_name: app_cassandra_db_2

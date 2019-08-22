@@ -7,7 +7,6 @@ import { generateToken } from '../shared/jwt';
 import { validateUserRegister } from '../shared/validator/auth';
 import { BodyResponse } from '../shared/serialiazer';
 import constraint from '../shared/constraint';
-import { hashPassword } from '../shared/hash';
 
 @BaseUrl({
   prefix: '/api/auth',

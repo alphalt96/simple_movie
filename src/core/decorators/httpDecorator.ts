@@ -2,13 +2,15 @@
 import 'reflect-metadata';
 import { Express, Router, Request, Response, NextFunction } from 'express';
 import { ControllerInstance, Controller } from '../controller';
+import { validateHandle } from '../../shared/validator/core';
 
 
 // type HttpHolder contain http info
 type HttpHolder = {
   method: string
   path: string
-  handler: string
+  handler: string,
+  middlewares?: (any[] | any)[]
 };
 
 type Middleware = {
@@ -45,6 +47,7 @@ export const BaseUrl = (routerObj: {
 const decoratorFactory = (
   method: string,
   path: string,
+  middlewares: (any[] | any)[],
   handler: string,
   target: any) => {
   let holders: HttpHolder[] = Reflect.getOwnMetadata('httpHolder', target);
@@ -54,7 +57,8 @@ const decoratorFactory = (
   holders.push({
     method,
     path,
-    handler
+    handler,
+    middlewares
   });
 };
 
@@ -62,12 +66,15 @@ const decoratorFactory = (
  * http method get
  * @param path : route path
  */
-export const Get = (path: string) => {
+export const Get = (route: {
+  path: string,
+  middlewares?: (any[] | any)[]
+}) => {
   return (
     target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor) => {
-    return decoratorFactory('get', path, propertyKey, target);
+    return decoratorFactory('get', route.path, route.middlewares, propertyKey, target);
   };
 };
 
@@ -75,13 +82,16 @@ export const Get = (path: string) => {
  * http method post
  * @param path : route path
  */
-export const Post = (path: string) => {
+export const Post = (route: {
+  path: string,
+  middlewares?: (any[] | any)[]
+}) => {
   return (
     target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) => {
-    return decoratorFactory('post', path, propertyKey, target);
+    return decoratorFactory('post', route.path, route.middlewares, propertyKey, target);
   };
 };
 
@@ -113,17 +123,27 @@ export const loadHandlerWithRoute = (content: {
       }
 
       reflectRoutes.httpHolder.forEach((route: HttpHolder) => {
-        const privateMiddlewares = (middlewares || [])
+        // get base route middlewares
+        const baseMiddlewares = (middlewares || [])
           .filter((middleware: Middleware) => {
             return middleware.excepts.includes(route.handler);
           })
           .map((middleware: Middleware) => {
             return middleware.middleware;
           });
+        // get private middlewares
+        const privateMiddlewares = (route.middlewares || []).reduce((pre, cur) => {
+          const tmp = pre;
+          if (cur instanceof Function) tmp.push(cur);
+          else tmp.push(...cur);
+          return tmp;
+        }, []);
         router[route.method].apply(router, [
           route.path,
+          ...baseMiddlewares,
           ...privateMiddlewares,
-          controller[route.handler]
+          validateHandle,
+          controller[route.handler].bind(controller)
         ]);
       });
       app.use(reflectRoutes.baseUrl, router);

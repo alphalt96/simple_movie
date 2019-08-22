@@ -1,0 +1,79 @@
+version: "3.7"
+services:
+  api:
+    image: node:12.8-alpine
+    container_name: app_api
+    working_dir: /usr/app
+    volumes:
+      - .:/usr/app
+    ports:
+      - 3000:3000
+    networks:
+      - dc1ring
+    environment:
+      - DATABASE_URL="postgres://postgres:secret@db/simple_movie"
+    depends_on:
+      - cassandra2
+    command: npm run dev
+
+  cassandra1:
+    image: cassandra:3.11.4
+    container_name: app_cassandra_db_1
+    volumes: 
+      - ./data/cassandra1:/var/lib/cassandra
+      - ./src/database/migrations:/docker-entrypoint-initdb.d
+      - ./cmd/entrypoint.sh:/docker-entrypoint.sh
+    environment:
+      - CASSANDRA_CLUSTER_NAME=dev_cluster
+      - CASSANDRA_SEEDS=cassandra1
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+    networks:
+      - dc1ring
+    ports:
+      - 9042:9042
+
+  cassandra2:
+    image: cassandra:3.11.4
+    container_name: app_cassandra_db_2
+    networks:
+      - dc1ring
+    volumes: 
+      - ./data/cassandra2:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=dev_cluster
+      - CASSANDRA_SEEDS=cassandra1
+    depends_on:
+      - cassandra1
+    ports:
+      - 9043:9042
+      # - 7000
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 60; fi && /docker-entrypoint.sh cassandra -f'
+
+  storage:
+    image: minio/minio:RELEASE.2019-06-15T23-07-18Z
+    container_name: app_storage
+    volumes:
+    - ./data/minio:/data
+    ports:
+    - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: AKIA6LRJHMWMS2SV7RET
+      MINIO_SECRET_KEY: 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
+      MINIO_REGION: us-east-1
+    command: server /data
+  
+  portainer:
+    image: portainer/portainer
+    container_name: app_portainer
+    networks:
+      - dc1ring
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/portainer-data:/data
+    # Enable you to access potainers web interface from your host machine
+    # using http://localhost:10000
+    ports:
+      - '10000:9000'
+
+networks:
+    dc1ring:

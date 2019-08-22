@@ -1,7 +1,8 @@
-import { Logger } from './logger';
+import { logger } from '../shared/logger';
+import winston = require('winston');
 
 export interface Controller {
-  logger: Logger;
+  logger: winston.Logger;
 }
 
 export interface ControllerInstance {
@@ -9,5 +10,5 @@ export interface ControllerInstance {
 }
 
 export class BaseController implements Controller {
-  logger: Logger;
+  logger = logger;
 }

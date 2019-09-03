@@ -7,6 +7,10 @@ import { generateToken } from '../shared/jwt';
 import { validateUserRegister } from '../shared/validator/auth';
 import { BodyResponse } from '../shared/serialiazer';
 import constraint from '../shared/constraint';
+import * as md5 from 'md5';
+import * as model from '../database/models';
+import { types } from 'cassandra-driver';
+
 
 @BaseUrl({
   prefix: '/api/auth',
@@ -16,11 +20,15 @@ export class AuthController extends BaseController {
   @Post({
     path: '/token/register'
   })
-  login(req: Request, res: Response, next: NextFunction) {
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
       this.logger.info(`handling api ${req.method} - ${req.originalUrl}`);
+      const user = await model.UserCredential.find({
+        email: req.body.email,
+        password: md5(req.body.password)
+      });
       const token = generateToken({
-        id: 1,
+        id: user.toArray()[0].id,
       });
       res.status(200).json({
         token
@@ -38,12 +46,16 @@ export class AuthController extends BaseController {
   })
   async register(req: Request, res: Response, next: NextFunction) {
     try {
-      // await UserCredential.save(UserCredential.create({
-      //   email: req.body.email,
-      //   password: hashPassword(req.body.password)
-      // }));
-      // this.logger.info('create user success');
-      // res.json(new BodyResponse(constraint.http.status[200]));
+      const result = await model.UserCredential.insert({
+        id: types.Uuid.random(),
+        email: req.body.email,
+        password: md5(req.body.password),
+        createdAt: types.generateTimestamp()
+      });
+      if (result.wasApplied()) {
+        this.logger.info('create user success');
+      }
+      res.json(new BodyResponse(constraint.http.status[200]));
       res.end();
     } catch (e) {
       next(e);

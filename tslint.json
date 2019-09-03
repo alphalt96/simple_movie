@@ -30,6 +30,7 @@
             ]
         },
         "curly": false,
-        "arrow-parens": false
+        "arrow-parens": false,
+        "no-string-literal": false
     }
 }

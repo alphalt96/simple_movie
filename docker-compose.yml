@@ -39,6 +39,7 @@ services:
       - dc1ring
     volumes: 
       - ./data/cassandra2:/var/lib/cassandra
+      - ./src/database/migrations:/docker-entrypoint-initdb.d
     environment:
       - CASSANDRA_CLUSTER_NAME=dev_cluster
       - CASSANDRA_SEEDS=cassandra1

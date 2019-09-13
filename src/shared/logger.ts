@@ -20,12 +20,7 @@ const formatLog = printf((msg: any) => {
   return `${msg.timestamp} - ${msg.level}: ${customOutLog(msg.message)}`;
 });
 
-const logConsole = new transports.Console({
-  format: combine(
-    colorize(),
-    formatLog
-  )
-});
+const logConsole = new transports.Console();
 
 // custom logger output logfile
 const logFiles = [];
@@ -56,6 +51,7 @@ export const logger = createLogger({
     timestamp({
       format: 'YYYY-MM-DD HH:mm:ss'
     }),
+    colorize(),
     formatLog,
     splat()
   ),

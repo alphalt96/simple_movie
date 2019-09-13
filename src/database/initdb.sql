@@ -1,1 +1,0 @@
-CREATE DATABASE simple_movie ENCODING UTF8;

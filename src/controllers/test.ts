@@ -1,7 +1,10 @@
 import { Get, BaseUrl, Post } from '../core/decorators/httpDecorator';
 import { BaseController } from '../core/controller';
 import * as cassandra from 'cassandra-driver';
-import { userCredential } from '../database/models/userCredentials';
+import { UserCredential, UserProfile } from '../database/models/user';
+import * as jwt from 'jsonwebtoken';
+import { Request } from 'express';
+import { authMiddleware } from '../middlewares/authenticator';
 
 @BaseUrl({
   prefix: '/api'
@@ -9,14 +12,12 @@ import { userCredential } from '../database/models/userCredentials';
 export class TestController extends BaseController {
 
   @Get({
-    path: '/test'
+    path: '/test',
+    middlewares: [
+      authMiddleware
+    ]
   })
-  async test(req, res) {
-    await userCredential.insert({
-      email: 'new2@gmail.com',
-      password: 'coincard',
-      userid: '4ab5fb24-5610-4949-bc48-68619d3c133b'
-    });
+  async test(req: Request, res) {
     res.send('test cai coin card a`');
   }
 

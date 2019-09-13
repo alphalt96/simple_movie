@@ -8,7 +8,3 @@ export const client = new cassandra.Client({
 
 
 export const Mapper = cassandra.mapping.Mapper;
-
-export const mapper = new Mapper(client, {
-  models: { UserCredential: { tables: ['user_credentials'] } }
-});

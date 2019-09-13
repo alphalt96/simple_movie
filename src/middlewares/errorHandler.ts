@@ -10,7 +10,7 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
   if (!err.status) {
     logger.error(err);
   }
-  const responseData = new BodyResponse(constraint.http.status[500]);
+  const responseData = new BodyResponse(status);
   responseData.message = err instanceof HttpError ? err.message : 'Internal Server Error';
   if (err.errorFields) {
     responseData.errors = err.errorFields;

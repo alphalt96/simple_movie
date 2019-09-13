@@ -8,13 +8,17 @@ import { loadHandlerWithRoute } from './core/decorators/httpDecorator';
 import { errorHandler } from './middlewares/errorHandler';
 import { logger } from './shared/logger';
 import * as bodyParser from 'body-parser';
-import * as socket from 'socket.io';
 import * as http from 'http';
+import { loadSocketApp } from './chat';
+import * as cors from 'cors';
 
 const app = express();
-const httpServer = http.createServer(app);
 
-const io = socket(httpServer);
+app.use(cors({
+  origin: 'http://localhost:4200'
+}));
+
+const httpServer = http.createServer(app);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -27,9 +31,7 @@ loadHandlerWithRoute({
   ]
 });
 
-io.on('connection', (socket) => {
-  console.log('connected');
-});
+loadSocketApp(httpServer);
 
 // use errorHandler middleware
 app.use(errorHandler);

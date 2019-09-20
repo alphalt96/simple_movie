@@ -42,7 +42,6 @@ export const authSocketMiddleware = async (socket: Socket, next) => {
     }
     next();
   } catch (e) {
-    console.log('ahihihihi', e);
     next(e);
   }
 };
